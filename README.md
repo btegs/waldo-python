@@ -1,7 +1,7 @@
 # EXIF reading application for Waldo Photos
 This Python based application will remotely contact the Amazon S3 instance, create a Python dictionary to store the photo indices, URLs, and EXIF data. This is accomplished by looping through the provided XML document, grabbing each image to a temporary directory, parsing the EXIF data, and storing it back into the Python dictionary. The indicies for the Python dictionary start at 1 for easy reference and it will be handy if they had to be imported into a SQL database since the indicies start at 1 in SQL.
 
-I have heavily commented the code to explain my methodology and also provided print messages to the console to alert the user when the next stage is happening. I used system libraries for the majority of the code and only one 3rd party library (exifread) was used and is referenced locally.
+I have heavily commented the code to explain my methodology and also provided print messages to the console to alert the user when the next stage is happening. I used system libraries for the majority of the code and only one 3rd party library (exifread) was used and is referenced locally. The code also aims to follow PEP8 styling standards.
 
 There are some checks to make sure the image isn't giving a 403 or 404 error and if there is an error of that type, the EXIF fields for that associated image are left blank. This test is currently saving data to a local JSON document, but storage in a SQL (MySQL, SQLite) or NoSQL (MongoDB) can be added if requested.
 
