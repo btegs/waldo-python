@@ -9,4 +9,4 @@ NOTE: When running the script to contact the S3 instance, I was getting 403 erro
 
 
 # Running
-Open up a Mac or Linux terminal and run "python2.7 exif.py" or "./exif.py" to use the locally installed Python 2.7 runtime on the machine.
+Open up a Mac or Linux terminal and run **python2.7 exif.py** or **./exif.py** to use the locally installed Python 2.7 runtime on the machine. If the script does not run, run **chmod +x exif.py** before running the script again.
