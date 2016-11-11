@@ -11,14 +11,21 @@
 from json import dump, load
 from os import remove
 from os.path import isdir, isfile
-from pprint import pprint, isreadable
 from shutil import copyfileobj
-from sys import exit
+from sys import exit, modules
 from urllib2 import HTTPError, URLError, urlopen
 from xml.dom.minidom import parseString
 
 # Import local 3rd party EXIF library
 import exifread
+
+# Try to import Redis library if it exists (https://pypi.python.org/pypi/redis)
+try:
+    from redis import StrictRedis
+    hasRedis = True
+except ImportError:
+    from pprint import pprint, isreadable
+    hasRedis = False
 
 # Create new class
 class OrganizeExif(object):
@@ -30,6 +37,7 @@ class OrganizeExif(object):
         self.doc = 'http://s3.amazonaws.com/waldo-recruiting'  # Document URL
         self.jsonResults = 'photos-results.json'  # Where final data is in JSON
         self.photoDict = {}  # Dictionary to store photo data
+        self.redisResults = 'bteg-exif'  # Where final data is in Redis
         self.tempJPG = '/tmp/temp.jpg'  # Temporary file for extracting EXIF
 
     # Read the remote document
@@ -168,12 +176,27 @@ class OrganizeExif(object):
                 exit('JSON not saved correctly.')
         '''
 
-        # Instead of a local JSON file, data will be simply displayed in the
-        # console via pretty print to show the results of the data structure
-        if isreadable(self.photoDict):
-            pprint(self.photoDict)
+        # If Redis exists
+        if hasRedis:
+
+            # Store the dictionary into Redis
+            # Put into a DB besides the default (0) to minimize overlap
+            # NOTE: Haven't fully tested as remote server occasionally times out
+            r = StrictRedis(host='localhost', port=6379, db=5)
+            r.hmset(self.redisResults, self.photoDict)
+            print('Results available in Redis via {0} in DB #5.'.format(
+                self.redisResults))
+
+        # If not
         else:
-            exit('Photo dictionary is not readable.')
+
+            # Instead of a local JSON file, data will be simply displayed in the
+            # console via pretty print to show the results of the data
+            # structure
+            if isreadable(self.photoDict):
+                pprint(self.photoDict)
+            else:
+                exit('Photo dictionary is not readable.')
 
 
 if __name__ == '__main__':
