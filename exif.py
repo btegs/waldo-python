@@ -162,7 +162,7 @@ class OrganizeExif(object):
                 with open(self.jsonResults, 'r') as jd:
                     jsonData = load(jd)
                     print('JSON results available at {0}.'.format(self.jsonResults))
-                
+
             # Invalid JSON file
             except ValueError as e:
                 exit('JSON not saved correctly.')
@@ -171,7 +171,7 @@ class OrganizeExif(object):
         # Instead of a local JSON file, data will be simply displayed in the
         # console via pretty print to show the results of the data structure
         if isreadable(self.photoDict):
-            print(pprint(self.photoDict))
+            pprint(self.photoDict)
         else:
             exit('Photo dictionary is not readable.')
 
